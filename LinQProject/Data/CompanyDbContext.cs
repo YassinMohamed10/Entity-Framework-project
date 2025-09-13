@@ -31,9 +31,12 @@ namespace LinQProject.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            //string str = "Data Source=D:\\\\C#Projects\\\\Backend\\\\ConsoleApp1\\\\company4.db";
-            string str = "Data Source=(localdb)\\ProjectModels;Initial Catalog=CompanyDB4;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
-            optionsBuilder.UseSqlite(str);
+
+            if (!optionsBuilder.IsConfigured)
+            {
+                string str = "Data Source=D:\\\\C#Projects\\\\Backend\\\\ConsoleApp1\\\\company4.db";
+                optionsBuilder.UseSqlite(str);
+            }
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

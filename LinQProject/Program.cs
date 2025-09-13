@@ -70,7 +70,7 @@ namespace LinQProject
         //   Add Employee
         public static void AddEmployee(CompanyDbContext ctx)
         {
-
+            ctx.Database.EnsureCreated();
             Console.Clear();
             var employee = new Employee();
             Console.WriteLine("Employee data:");
@@ -107,6 +107,7 @@ namespace LinQProject
         //  Add department
         public static void AddDepartment(CompanyDbContext ctx)
         {
+            ctx.Database.EnsureCreated();
             Console.Clear();
             var department = new Department();
             Console.WriteLine("Department data:");
@@ -121,6 +122,7 @@ namespace LinQProject
         //  Add project
         public static void AddProject(CompanyDbContext ctx)
         {
+            ctx.Database.EnsureCreated();
             Console.Clear();
             var project = new Project();
             Console.WriteLine("Project data:");
