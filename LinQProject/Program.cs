@@ -188,12 +188,19 @@ namespace LinQProject
                 Console.WriteLine($"DepartmentId:{emp.DepartmentId} ,DepartmentName:{emp.Department?.Name}");
                 Console.WriteLine("Wroks on:");
                 Console.WriteLine("**********");
-                foreach (var ep in emp.EmployeeProjects)
-                {
 
-                    Console.WriteLine($"ProjectID:{ep.ProjectId} ,ProjectName:{ep.Project?.Name}");
+                if (emp.EmployeeProjects != null && emp.EmployeeProjects.Any())
+                {
+                    foreach (var ep in emp.EmployeeProjects)
+                    {
+                        Console.WriteLine($"ProjectID:{ep.ProjectId} ,ProjectName:{ep.Project?.Name}");
+                    }
                 }
-                Console.WriteLine("------------------------------------------------");
+                else
+                {
+                    Console.WriteLine("There is not any project!!!!");
+                }
+                    Console.WriteLine("------------------------------------------------");
                 Console.WriteLine("#################################################");
                 Console.WriteLine("------------------------------------------------");
             }
@@ -217,10 +224,16 @@ namespace LinQProject
             {
                 Console.WriteLine($"ID:{dep.DepartmentId} ,name:{dep.Name}");
                 Console.WriteLine("has employees:");
-                Console.WriteLine("**********");
-                foreach (var em in dep.Employees)
+                Console.WriteLine("***************");
+                if (dep.Employees != null && dep.Employees.Any())
                 {
-                    Console.WriteLine($"ID:{em.EmployeeId} ,name:{em.FirstName} {em.LastName}");
+                    foreach (var em in dep.Employees)
+                    {
+                        Console.WriteLine($"ID:{em.EmployeeId} ,name:{em.FirstName} {em.LastName}");
+                    }
+                }
+                else {
+                    Console.WriteLine("There is not any Employee!!!!!");
                 }
                 Console.WriteLine("------------------------------------------------");
                 Console.WriteLine("#################################################");
@@ -245,10 +258,16 @@ namespace LinQProject
             {
                 Console.WriteLine($"Name:{proj.Name} ,Date:({proj.StartDate} - {proj.EndDate})");
                 Console.WriteLine("worked on by:");
-                Console.WriteLine("**********");
-                foreach (var em in proj.EmployeeProjects)
+                Console.WriteLine("***************");
+                if (proj.EmployeeProjects != null && proj.EmployeeProjects.Any())
                 {
-                    Console.WriteLine($"ID:{em.EmployeeId} ,name:{em.Employee?.FirstName} {em.Employee?.LastName}");
+                    foreach (var em in proj.EmployeeProjects)
+                    {
+                        Console.WriteLine($"ID:{em.EmployeeId} ,name:{em.Employee?.FirstName} {em.Employee?.LastName}");
+                    }
+                }
+                else {
+                    Console.WriteLine("There is not any Employee!!!!!");
                 }
                 Console.WriteLine("------------------------------------------------");
                 Console.WriteLine("#################################################");
