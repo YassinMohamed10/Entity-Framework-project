@@ -72,7 +72,7 @@ namespace LinQProject
         {
 
             Console.Clear();
-            Employee employee = new Employee();
+            var employee = new Employee();
             Console.WriteLine("Employee data:");
             Console.WriteLine("######################");
             Console.Write("Enter first name:");
@@ -88,7 +88,17 @@ namespace LinQProject
                 Console.WriteLine($"ID:{dep.DepartmentId} ,name:{dep.Name}");
             }
             Console.Write("\nEnter ID number of selected Department:");
-            employee.DepartmentId = int.Parse(Console.ReadLine());
+            int depId = int.Parse(Console.ReadLine());
+            if (depId > 0)
+            {
+                var dep = ctx.Departments.Find(depId);
+                if (dep == null)
+                {
+                    Console.WriteLine("Department not found, cannot assign employee.");
+                    return;
+                }
+                employee.DepartmentId = depId;
+            }
             ctx.Employees.Add(employee);
             ctx.SaveChanges();
             Console.WriteLine("\nEmployee added successfully.");
@@ -98,7 +108,7 @@ namespace LinQProject
         public static void AddDepartment(CompanyDbContext ctx)
         {
             Console.Clear();
-            Department department = new Department();
+            var department = new Department();
             Console.WriteLine("Department data:");
             Console.WriteLine("######################");
             Console.Write("Enter name:");
@@ -112,17 +122,25 @@ namespace LinQProject
         public static void AddProject(CompanyDbContext ctx)
         {
             Console.Clear();
-            Project project = new Project();
+            var project = new Project();
             Console.WriteLine("Project data:");
             Console.WriteLine("######################");
             Console.Write("Enter Project name:");
             project.Name = Console.ReadLine();
             Console.WriteLine("*****************");
-            Console.Write("Enter Project startDate:");
-            project.StartDate = DateOnly.Parse(Console.ReadLine());
-            Console.WriteLine("*****************");
-            Console.Write("Enter Project endDate:");
-            project.EndDate = DateOnly.Parse(Console.ReadLine());
+            try
+            {
+                Console.Write("Enter Project startDate:");
+                project.StartDate = DateOnly.Parse(Console.ReadLine());
+                Console.WriteLine("*****************");
+                Console.Write("Enter Project endDate:");
+                project.EndDate = DateOnly.Parse(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid date format. Please use YYYY-MM-DD.");
+                return;
+            }
             ctx.Projects.Add(project);
             ctx.SaveChanges();
             Console.WriteLine("\nProject added successfully.");
@@ -151,6 +169,12 @@ namespace LinQProject
         public static void DisplayEmployees(CompanyDbContext ctx)
         {
             Console.Clear();
+            if (ctx.Employees.Count() == 0)
+            {
+                Console.WriteLine("No Employees to display.");
+                Console.ReadKey();
+                return;
+            }
             Console.WriteLine("Data of Employees");
             Console.WriteLine("-------******--------");
             var employees = ctx.Employees.Include(d => d.Department).Include(ep => ep.EmployeeProjects).ThenInclude(p => p.Project).ToList();
@@ -177,6 +201,12 @@ namespace LinQProject
         public static void DisplayDepartments(CompanyDbContext ctx)
         {
             Console.Clear();
+            if (ctx.Departments.Count() == 0)
+            {
+                Console.WriteLine("No Departments to display.");
+                Console.ReadKey();
+                return;
+            }
             Console.WriteLine("Data of Departments");
             Console.WriteLine("-------******--------");
             var deparments = ctx.Departments.Include(e => e.Employees).ToList();
@@ -200,6 +230,12 @@ namespace LinQProject
         public static void DisplayProjects(CompanyDbContext ctx)
         {
             Console.Clear();
+            if (ctx.Projects.Count() == 0)
+            {
+                Console.WriteLine("No Projects to display.");
+                Console.ReadKey();
+                return;
+            }
             Console.WriteLine("Data of Projects");
             Console.WriteLine("-------******--------");
             var projects = ctx.Projects.Include(e => e.EmployeeProjects).ThenInclude(em => em.Employee).ToList();
@@ -346,6 +382,9 @@ namespace LinQProject
                         }
                     }
                     break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
             }
             Console.ReadKey();
         }
@@ -401,7 +440,9 @@ namespace LinQProject
                     ctx.SaveChanges();
                     Console.WriteLine("Employee assigned to department successfully.");
                     break;
-
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
             }
             Console.ReadKey();
         }
@@ -468,6 +509,9 @@ namespace LinQProject
                     ctx.SaveChanges();
                     Console.WriteLine("Employee assigned to project successfully.");
                     break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
             }
             Console.ReadKey();
         }
@@ -504,6 +548,9 @@ namespace LinQProject
                     int projId = int.Parse(Console.ReadLine());
                     var proj = ctx.Projects.Find(projId);
                     if (proj != null) { ctx.Projects.Remove(proj); ctx.SaveChanges(); Console.WriteLine("Deleted."); }
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
                     break;
             }
             Console.ReadKey();
